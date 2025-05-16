@@ -5,7 +5,7 @@ data quality issues. While I am aware that there are other packages around pypl 
 I have found myself getting lost while trying to setup some of those. So I started testing developing
 my own.
 
-I am at being able to detect and address:
+I am aiming at being able to detect and address:
 
 Completeness - Data being incomplete
 Consistency - Data not being consistent between sources
@@ -20,7 +20,7 @@ There are two main components:
 - Configs:
 
     Contains the configuration for each dataset to be created/ present in my environemnt. Inside of the yml, we have the definitions
-    of the datasets and which columns are in it, as well as the tests to be applied against each column of the dataset
+    of the datasets and which columns are in it, their types, as well as the tests to be applied against each column of the dataset
 
 - Annotator package
 
@@ -30,4 +30,4 @@ There are two main components:
 
 ## How can you help?
 
-By suggesting changes, reaching out and 
+By suggesting changes
