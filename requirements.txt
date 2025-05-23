@@ -2,5 +2,5 @@ numpy
 pandas
 pyspark==3.5.0
 datetime
-pyyaml
+yaml
 

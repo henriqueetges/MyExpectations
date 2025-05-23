@@ -5,7 +5,6 @@ from pyspark.sql.functions import trim, lower
 from pyspark.sql import DataFrame as SparkDataFrame
 from pyspark.sql import SparkSession
 from pyspark.sql.window import Window
-from collections import defaultdict
 
 class Annotator:
     def __init__(self, spark_session: SparkSession,df: SparkDataFrame, metadata_path: str):
