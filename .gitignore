@@ -1,2 +1,4 @@
-data/
-MyExpectations/
+*.parquet
+.venv/
+__pycache__/
+*.ipynb

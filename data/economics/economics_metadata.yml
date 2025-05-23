@@ -1,0 +1,82 @@
+layer: silver
+source_type: fabric_connection
+connection_name: sqlserver_contracts
+source_table: economics
+table_name: economics
+key_1: customer_id
+key_2: null
+date_column: updated_at
+partition_cols: 
+columns:
+  - column_name: growername
+    type: string
+    tests:
+      - test_type: is_null
+  
+  - column_name: leaftechnician
+    type: string
+    tests:
+      - test_type: is_null
+
+  - column_name: growerstatus
+    type: boolean
+    tests:
+      - test_type: outside_of_rules
+        kwargs:
+          expression: GrowerStatus = 1
+          
+  - column_name: totalhectarestotalproperty
+    type: integer
+    tests:
+      - test_type: outside_of_rules
+        test_name: notzero
+        kwargs:
+          expression:  (totalhectarestotalproperty > 0) OR totalhectarestotalproperty IS NULL
+
+  - column_name: totalhectarestobacco
+    type: string
+    tests:
+      - test_type: outside_of_rules
+        test_name: notzero
+        kwargs:
+          expression: (totalhectarestobacco > 0) OR totalhectarestobacco IS NULL
+      
+  - column_name: totalvolumecontractedktons
+    type: string
+    tests:  
+      - test_type: outside_of_rules
+        test_name: notzero
+        kwargs:
+          expression: (totalvolumecontractedktons > 0) OR totalvolumecontractedktons IS NULL
+
+  - column_name: totalvolumeproducedktons
+    type: string
+    tests:  
+      - test_type: outside_of_rules
+        test_name: notzero
+        kwargs:
+          expression: (totalvolumeproducedktons > 0) OR totalvolumeproducedktons IS NULL
+  
+  - column_name: totalareaproducedha
+    type: string
+    tests:  
+      - test_type: outside_of_rules
+        test_name: notzero
+        kwargs:
+          expression: (totalareaproducedha > 0) OR totalareaproducedha IS NULL
+
+  - column_name: PercentOfUsage
+    type: string
+    tests:  
+      - test_type: outside_of_rules
+        test_name: morethanavailable
+        kwargs:
+          expression: PercentOfUsage > 2
+
+
+          
+
+
+            
+
+

@@ -16,18 +16,41 @@ Validity - Data is at the right format
 
 ## How is this project structured?
 
-There are two main components:
+There are three main components:
 - Configs:
 
-    Contains the configuration for each dataset to be created/ present in my environemnt. Inside of the yml, we have the definitions
-    of the datasets and which columns are in it, their types, as well as the tests to be applied against each column of the dataset
+    Contains the configuration and metadata for each dataset (table), which defines where to fetch data from and which file to use to test the columns. 
+
+- Columns metadata:
+
+    Contains which columns will be tested, what are the tests and which arguments to use in each. In this project it is defined of the folders in data, because I wanted to keep it structured that way
+    for my project. As long as the configs file is correctly poiting to them, you are fine with putting it anywhere!
 
 - Annotator package
 
     Inside of the utils package, we have two classes that will handle annotating and checking the datasets:
     - Annotator: Handle table operations, checking each column of the dataset against the pre-defined tests
-    - Annotator Manager: Handles assigning table configurations to the annotator class
+        Types of tests:
+            - Completeness: is_null 
+            - Timeliness: not_timely
+            - Validity: outside_of_rules
+            - Uniqueness: duplicated
+            - Conformity: To be implemented, I want to test three things here
+                - Conformity with other columns in a differnt table
+                - Data type conformity
+                - Pattern conformity
+    - Annotator Manager: Main handles of this project, it is the guy who takes the spark session and table metadata and runs all of the checks.
+
+## How can I reproduce this?
+
+1 - Install required packages
+2 - Make sure that you have pyspark working in your environment
+3 - Make the appropriate changes to configs and metadata files
 
 ## How can you help?
 
 By suggesting changes
+
+# IMPORTANT!
+
+Right now, the handler only loads parquet files. I may update this in the future to include support to other sources.

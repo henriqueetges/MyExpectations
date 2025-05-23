@@ -1,0 +1,88 @@
+layer: silver
+metadata_path: 
+source_type: fabric_connection
+connection_name: sqlserver_contracts
+source_table: contracts
+table_name: contracts
+key_1: customer_id
+key_2: null
+date_column: updated_at
+partition_cols: 
+columns:
+  - column_name: FirstName
+    type: string
+    tests:
+      - test_type: is_null
+  
+  - column_name: LeafTechnician
+    type: string
+    tests:
+      - test_type: is_null
+  - column_name: Gender
+    type: string
+    tests: 
+      - test_type: is_null
+      - test_type: not_in_list
+        kwargs: 
+          expected_values: [Male, Female]
+  - column_name: Code
+    type: string
+    tests: 
+      - test_type: is_null
+      - test_type: duplicated
+  - column_name: Status
+    type: string
+    tests: 
+      - test_type: is_null
+      - test_type: not_in_list
+        kwargs:
+          expected_values: [Active, Inactive] 
+  - column_name: CropType
+    type: string
+    tests: 
+      - test_type: is_null
+      - test_type: not_in_list
+        kwargs:
+          expected_values: ['Flue Cured', 'Broadleaf', 'Burley']
+  - column_name: CropSubType
+    type: string
+    tests:
+      - test_type: is_null
+          
+  - column_name: YearsGrowingTobacco
+    type: integer
+    tests:
+      - test_type: outside_of_rules
+        test_name: higherthanagriculture
+        kwargs:
+          expression:  YearsGrowingTobacco > YearsinAgricultureBusiness
+      - test_type: outside_of_rules
+        test_name: higherthanage          
+        kwargs:            
+          expression: YearsGrowingTobacco > Age
+  - column_name: YearsContractingwithAOI
+    type: string
+    tests:
+      - test_type: outside_of_rules
+        test_name: higherthanagriculture
+        kwargs:
+          expression: YearsContractingwithAOI > YearsinAgricultureBusiness
+      
+      - test_type: outside_of_rules
+        test_name: higherthanage
+        kwargs:
+          expression: YearsContractingwithAOI > Age
+  - column_name: YearsinAgricultureBusiness
+    type: string
+    tests:  
+      - test_type: outside_of_rules
+        test_name: higherthanage
+        kwargs:
+          expression: YearsinAgricultureBusiness > Age
+          
+          
+
+
+            
+
+

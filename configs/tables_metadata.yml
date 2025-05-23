@@ -1,0 +1,24 @@
+tables:
+- layer: silver
+  table_path: data/contracts/Contratos.parquet
+  source_type: fabric_connection
+  connection_name: sqlserver_contracts
+  source_table: contracts
+  table_name: contracts
+  metadata_path: data\contracts\contracts_metadata.yml
+  key_1: customer_id
+  key_2: null
+  date_column: updated_at
+  partition_cols: 
+
+- layer: silver
+  table_path: data/economics/Economics.parquet
+  source_type: fabric_connection
+  connection_name: sqlserver_contracts
+  source_table: economics
+  table_name: economics
+  metadata_path: data/economics/economics_metadata.yml
+  key_1: customer_id
+  key_2: null
+  date_column: updated_at
+  partition_cols:   
