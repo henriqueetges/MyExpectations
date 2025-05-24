@@ -43,9 +43,9 @@ There are three main components:
 
 ## How can I reproduce this?
 
-1 - Install required packages
-2 - Make sure that you have pyspark working in your environment
-3 - Make the appropriate changes to configs and metadata files
+1. Install required packages
+2. Make sure that you have pyspark working in your environment
+3. Make the appropriate changes to configs and metadata files
 
 ## How can you help?
 
