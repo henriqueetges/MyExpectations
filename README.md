@@ -7,12 +7,12 @@ my own.
 
 I am aiming at being able to detect and address:
 
-Completeness - Data being incomplete
-Consistency - Data not being consistent between sources
-Timeliness - Data being outdated
-Accuracy - Data not being comparable to real world observations / rules
-Uniqueness - Data does not have duplication issues
-Validity - Data is at the right format
+- Completeness - Data being incomplete
+- Consistency - Data not being consistent between sources
+- Timeliness - Data being outdated
+- Accuracy - Data not being comparable to real world observations / rules
+- Uniqueness - Data does not have duplication issues
+- Validity - Data is at the right format
 
 ## How is this project structured?
 
