@@ -1,11 +1,11 @@
 tables:
 - layer: silver
   table_path: data/contracts/Contratos.parquet
-  source_type: fabric_connection
+  source_type: parquet
   connection_name: sqlserver_contracts
   source_table: contracts
   table_name: contracts
-  metadata_path: data\contracts\contracts_metadata.yml
+  metadata_path: data/contracts/contracts_metadata.yml
   key_1: customer_id
   key_2: null
   date_column: updated_at
@@ -13,7 +13,7 @@ tables:
 
 - layer: silver
   table_path: data/economics/Economics.parquet
-  source_type: fabric_connection
+  source_type: parquet
   connection_name: sqlserver_contracts
   source_table: economics
   table_name: economics
