@@ -28,7 +28,9 @@ There are three main components:
 
 - Annotator package
 
-    Inside of the utils package, we have two classes that will handle annotating and checking the datasets:
+    Inside of the utils package, we have a couple classes that will handle loading configs, loading dataframes, annotating and checking the datasets:
+    - ConfigLoader: loads the configs for the tables out of the config file
+    - DataLoader: loads the data into Spark Dataframes based on the configs
     - Annotator: Handle table operations, checking each column of the dataset against the pre-defined tests
         Types of tests:
             - Completeness: is_null 
@@ -51,6 +53,3 @@ There are three main components:
 
 By suggesting changes
 
-# IMPORTANT!
-
-Right now, the handler only loads parquet files. I may update this in the future to include support to other sources.

@@ -7,28 +7,18 @@ from utils import Annotator
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class AnnotationManager:
-    def __init__(self, spark_session, config_path):
+    def __init__(self, spark_session, dfs):
         self.spark = spark_session
-        self.config_path = config_path
-        with open(self.config_path, 'r') as f:
-            self.config = yaml.safe_load(f)      
+        self.dfs = dfs  
         
-    def load_dataframe(self) -> SparkDataFrame: 
-        for tables in self.config.get('tables'):
-          path = tables.get('table_path')
-        return self.spark.read.parquet(path, header = True, sep=';', inferSchema = True)
-        
-    
     def run_annotations(self): 
       results = {}       
-      for table_config in self.config.get('tables'):
-        table_name = table_config.get('table_name')
-        table_metadata_path = table_config.get('metadata_path')
-        layer = table_config.get('layer')
-        logging.info(f'Processing table: {layer}.{table_name}')
-        try:
-          df = self.spark.read.parquet(table_config.get('table_path'))
-          annotator = Annotator(self.spark, df, table_metadata_path)
+      for table_name, table in self.dfs.items():
+        layer = table.get('layer')
+        metadata_path = table.get('metadata_path')
+        df = table.get('dataframe')
+        try:          
+          annotator = Annotator(self.spark, df, metadata_path)
           annotated_df = annotator.Annotate()
           results[f'{layer}.{table_name}'] = annotated_df
         except Exception as e:          
@@ -37,13 +27,23 @@ class AnnotationManager:
       return results
 
     def get_completeness(self, df):
-      tested_columns = [col for col in df.columns if col.startswith('is_null.')]
+      tested_columns = [col for col in df.columns if col.startswith('is_missing.')]
       if not tested_columns:
           return df.withColumn('completeness', F.lit(1.0)) 
       return df.withColumn('completeness', 1-(
                            sum(F.col(f"`{c}`").cast('int')for c in tested_columns)
                            / len(tested_columns)))
     
+    def get_consistency(self, df):
+      tested_columns = [col for col in df.columns 
+        if col.startswith('type_missmatch') 
+        or col.startswith('inconsistent')]
+      if not tested_columns:
+        return df.withColumn('consistency', F.lit(1.0))
+      return df.withColumn('consistency', 1 - (
+                            sum(F.col(f"`{c}`").cast('int') for c in tested_columns)
+                            / len(tested_columns)))
+
     def get_uniqueness(self, df):
       tested_columns = [col for col in df.columns  if col.startswith('duplicated.')]
       if not tested_columns:
@@ -76,9 +76,12 @@ class AnnotationManager:
                            / len(tested_columns)))
       
     def run_results(self):
+      """THIS PROBABLY CAN BE REFACTORED INTO ITS OWN CLASS ALONG WITH
+      THE INDIVIDUAL TESTS"""
       results = {}
       test_funcs = [
         self.get_accuracy,
+        self.get_consistency,
         #self.get_timeliness, 
         self.get_uniqueness ,
         #self.get_currency, 
@@ -98,17 +101,11 @@ class AnnotationManager:
         df = df.withColumn('QScore'
           , F.round((
           (F.col('accuracy') 
+          + F.col('consistency')
           + F.col('uniqueness') 
-          + F.col('completeness')) / 3), 2))
+          + F.col('completeness')) / 4), 2))
         results[f'{table}'] = df
       return results
           
-
-      
-
-      
-        
-
-
 if __name__ == '__main__':
   pass
