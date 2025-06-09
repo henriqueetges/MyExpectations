@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  data_integrity:
+    container_name: data_integrity_services
+    image: data_integrity:latest
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - "8888:8888"
+    volumes:
+      - "C:/Users/henri/OneDrive/Documents/Projetos/Data_Integrity:/app"
+    working_dir: /app
+    command: jupyter lab --ip=0.0.0.0 --allow-root --no-browser --NotebookApp.token='' --NotebookApp.password=''
