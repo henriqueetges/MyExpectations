@@ -3,3 +3,4 @@
 __pycache__/
 *.ipynb
 .devcontainer/
+docker-compose.yml
