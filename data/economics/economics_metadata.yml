@@ -3,7 +3,7 @@ columns:
     type: string
     tests:
       - test_type: is_missing
-      - test_type: type_missmatch
+      - test_type: type_mismatch
   
   - column_name: leaftechnician
     type: string

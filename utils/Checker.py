@@ -78,10 +78,12 @@ class Checker:
       """
       column_name = kwargs.get('column', '')
       window = Window.partitionBy(column_name).orderBy(F.lit(1))
-      self.df = self.df.withColumn("row_number", F.row_number().over(window))
-      result_flag = (F.col("row_number") > 1)
+      self.df = self.df.withColumn("row_number_window", F.row_number().over(window))
+      result_flag = (F.col("row_number_window") > 1)
       score = F.when(result_flag, F.lit(0)).otherwise(F.lit(1))
-      return self._build_result(result_flag, score,**kwargs)
+      result = self._build_result(result_flag, score, **kwargs)
+      self.df = self.df.drop("row_number_window")
+      return result
 
     def Annotate_outdated(self, **kwargs) -> SparkDataFrame:
       """
@@ -93,9 +95,8 @@ class Checker:
       THIS NEEDS TO BE REFACTORED TO CHECK FOR VALUE IN RANGE 
       """
       column_name = kwargs.get('column', '')
-      threshold = kwargs.get('kwargs', {}).get('threshold', 0)
-      today = datetime.date.today()
-      result_flag = (F.col(column_name) < today - F.expr(f"INTERVAL {threshold} DAYS"))
+      threshold = kwargs.get('kwargs', {}).get('threshold', 0)    
+      result_flag = (F.col(column_name) < F.date_sub(F.current_date(), threshold))
       # change scoring here based on the degree of change to the expected date
       score = F.when(result_flag, F.lit(0)).otherwise(F.lit(1))      
       return self._build_result(result_flag, score,**kwargs)
@@ -189,8 +190,8 @@ class Checker:
         'not_timeliness': self.Annotate_outdated,
         'outside_of_rules': self.Annotate_not_rules,
         'not_in_list': self.Annotate_not_in_list,  
-        'type_missmatch': self.Annotate_type_inconsistency,
-        'pattern_missmatch':self.Annotate_pattern_inconsistency,
+        'type_mismatch': self.Annotate_type_inconsistency,
+        'pattern_mismatch':self.Annotate_pattern_inconsistency,
         #consistency': self.Annotate_not_consistent_with,      
      }
       dfs = []
