@@ -41,13 +41,14 @@ There are three main components:
                 - Conformity with other columns in a differnt table
                 - Data type conformity
                 - Pattern conformity
+    - Checker: Checks for the same dimensions but instead of annotating, creates a new dataframe with test results
+    - Logging_utils: Sets up logging
     - Annotator Manager: Main handles of this project, it is the guy who takes the spark session and table metadata and runs all of the checks.
 
 ## How can I reproduce this?
 
 1. Install required packages
-2. Make sure that you have pyspark working in your environment
-3. Make the appropriate changes to configs and metadata files
+2. Make the appropriate changes to configs and metadata files
 
 ## How can you help?
 
