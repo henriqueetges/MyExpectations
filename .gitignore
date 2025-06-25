@@ -4,4 +4,4 @@ __pycache__/
 .venv/
 .devcontainer/
 .env
-.logs
+logs/
