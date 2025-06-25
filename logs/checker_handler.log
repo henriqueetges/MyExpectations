@@ -1,0 +1,10 @@
+2025-06-25 14:13:58,322 | INFO | Metadata | Fetching metadata for contracts
+2025-06-25 14:13:58,323 | INFO | Metadata | contracts metadata fetched
+2025-06-25 14:13:58,323 | INFO | Checks | silver.contracts using info from data/contracts/contracts_metadata.yml
+2025-06-25 14:13:59,237 | INFO | Checks | silver.contracts | completed in 0.91 seconds
+2025-06-25 14:13:59,266 | INFO | Metadata | Fetching metadata for economics
+2025-06-25 14:13:59,267 | INFO | Metadata | economics metadata fetched
+2025-06-25 14:13:59,268 | INFO | Checks | silver.economics using info from data/economics/economics_metadata.yml
+2025-06-25 14:13:59,556 | INFO | Checks | silver.economics | completed in 0.29 seconds
+2025-06-25 14:13:59,572 | INFO | Compilation | Compiling results
+2025-06-25 14:13:59,588 | INFO | Compilation | completed in 0.01 seconds

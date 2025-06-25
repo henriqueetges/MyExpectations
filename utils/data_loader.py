@@ -7,22 +7,35 @@ class DataLoader:
     self.configs = configs
     self.spark = spark
     
-  def load_csv(self, path) -> DataFrame:
+  def load_csv(self, path: str) -> DataFrame:
+    """
+    Loads data from a csv file
+    """
     if not path:
       raise ValueError(f'Path nor provided for csv file')
     return self.spark.read.csv(path)
   
-  def load_parquet(self, path) -> DataFrame:
+  def load_parquet(self, path: str) -> DataFrame:
+    """
+    Loads data from a parquet file
+    """
     if not path:
       raise ValueError(f'Path nor provided for parquet file')
     return self.spark.read.parquet(path)
   
-  def load_sql(self, query) -> DataFrame:
+  def load_sql(self, query: str) -> DataFrame:
+    """
+    Loads data from a query
+    """
     if not query:
       raise ValueError(f'Query not provided for sql')
     return self.spark.sql(query)
 
   def load_dataframe(self) -> dict[str, DataFrame]: 
+    """
+    Handler that assigns the loader functions depending on the 
+    configs metadata and the source types
+    """
     dataframes = {}
     for tables in self.configs:
       table_name = tables.get('table_name')
