@@ -1,7 +1,7 @@
 *.parquet
-.venv/
-__pycache__/
 *.ipynb
+__pycache__/
+.venv/
 .devcontainer/
 .env
 .logs
