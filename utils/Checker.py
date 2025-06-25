@@ -93,9 +93,9 @@ class Checker:
       THIS NEEDS TO BE REFACTORED TO CHECK FOR VALUE IN RANGE 
       """
       column_name = kwargs.get('column', '')
-      threshold = kwargs.get('kwargs', {}).get('threshold', {})
+      threshold = kwargs.get('kwargs', {}).get('threshold', 0)
       today = datetime.date.today()
-      result_flag = (F.col(column_name) < today - datetime.timedelta(days=threshold))
+      result_flag = (F.col(column_name) < today - F.expr(f"INTERVAL {threshold} DAYS"))
       # change scoring here based on the degree of change to the expected date
       score = F.when(result_flag, F.lit(0)).otherwise(F.lit(1))      
       return self._build_result(result_flag, score,**kwargs)
@@ -124,7 +124,7 @@ class Checker:
       column_name = kwargs.get('column')      
       expected_values = kwargs.get('kwargs',{}).get('expected_values', [])
       result_flag = (lower(trim(F.col(column_name))).isin([v.lower() for v in expected_values]))
-      score = F.when(result_flag, F.lit(0)).otherwise(F.lit(1))
+      score = F.when(result_flag, F.lit(1)).otherwise(F.lit(0))
       return self._build_result(result_flag, score,**kwargs)
 
     def Annotate_pattern_inconsistency(self, **kwargs):
@@ -152,15 +152,8 @@ class Checker:
       column_name, expected_type = kwargs.get('column'), kwargs.get('type')
       if column_name is None or expected_type is None:
         raise ValueError('Unespecified column or column type')
-      type_map = {
-        'string': SType.StringType(),
-        'integer': SType.IntegerType(),
-        'float': SType.FloatType(),
-        'boolean': SType.BooleanType()
-      }
-      actual_type = self.df.schema[column_name].dataType
-      is_missmatch = actual_type != type_map.get(expected_type)
-      result_flag = (F.lit(is_missmatch))
+      casted = F.col(column_name).cast(expected_type)      
+      result_flag = casted.isNull() & F.col(column_name).isNotNull()  
       score = F.when(result_flag, F.lit(0)).otherwise(F.lit(1))
       return self._build_result(result_flag, score,**kwargs)
 
@@ -208,9 +201,9 @@ class Checker:
         else:
             df = expectation_funcs[test_params.get('test_type')](**test_params)
             dfs.append(df)
-        final_df = dfs[0]
-        for df in dfs[1:] :
-          final_df = final_df.unionByName(df)
+      final_df = dfs[0]
+      for df in dfs[1:] :
+        final_df = final_df.unionByName(df)
       return final_df
             
 
