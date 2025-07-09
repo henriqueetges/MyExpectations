@@ -1,10 +1,12 @@
 import logging
 import time
+import inspect
 from functools import reduce
 from pyspark.sql import functions as F
 from pyspark.sql import DataFrame as SparkDataFrame
 from .Checker import Checker
 from .logging_utils import setup_logging
+
 
 setup_logging('checker_handler.log')
 
@@ -21,7 +23,8 @@ class CheckerHandler:
         step: str
         message: str
       """
-      logging.info(f"{step} | {message}")
+      caller = inspect.stack()[1].function
+      logging.info({'step': step,  'caller': caller, 'message': message})
 
     def _log_duration(self, step: str, start_time: float) -> float:
       """

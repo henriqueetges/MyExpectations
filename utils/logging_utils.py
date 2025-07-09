@@ -2,7 +2,24 @@
 import logging
 from pathlib import Path
 import os
+import json
+import traceback
+from datetime import datetime, timezone
 
+class JSONFormatter(logging.Formatter):
+  def format(self, record):
+    log_record = {
+      'timestamp': datetime.fromtimestamp(record.created, tz=timezone.utc).isoformat(),
+      'level': record.levelname, 
+      'message': record.getMessage(),
+      'logger': record.name,
+      'module': record.module,
+    }
+    if record.exc_info:
+      log_record['exception'] = ''.join(traceback.format_exception(*record.exc_info))
+    return json.dumps(log_record)
+  
+  
 def setup_logging(log_file: str = "checker_handler.log", level=logging.INFO):
     """
     Configures logging to output to both a file and the notebook/console.
@@ -23,8 +40,11 @@ def setup_logging(log_file: str = "checker_handler.log", level=logging.INFO):
     log_path = os.path.join(logs_dir, log_file)  
     for handler in logging.root.handlers[:]:
       logging.root.removeHandler(handler)
-
-    
+    Formatter = JSONFormatter()
+    file_handler = logging.FileHandler(Formatter)
+    stream_handler = logging.StreamHandler()
+    file_handler.setFormatter(Formatter)
+    stream_handler.setFormatter(Formatter)  
     logging.basicConfig(
       level=level,
       format='%(asctime)s | %(levelname)s | %(message)s',
